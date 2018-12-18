@@ -72,8 +72,8 @@ class MainActivity : AppCompatActivity(), FoodContract.View {
         Log.d("MainActivity", "OnResume:called")
     }
 
-    override fun updateQuantity(qty: Int) {
-        toast("Clicked!")
+    override fun updateQuantity(message: String) {
+        toast(message)
     }
 
     override fun showFoodItems(items: List<Food>) {

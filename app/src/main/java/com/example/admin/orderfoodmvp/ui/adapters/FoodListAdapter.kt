@@ -26,7 +26,7 @@ class FoodListAdapter internal constructor(
             with(food) {
 
                 itemView.foodTitle.text = item_name
-                itemView.qtyView.text = quantity.toString()
+                //itemView.qtyView.text = quantity.toString()
                 itemView.icon.load(image_url)
                 itemView.plusBtn.setOnClickListener { plusBtnClick(this.item_name) }
                 itemView.minusBtn.setOnClickListener { minusBtnClick(this.item_name) }

@@ -8,12 +8,12 @@ class FoodPresenter(val foodRepository: FoodRepository, val foodView: FoodContra
 
     override fun onPlusBtnClicked(itemName: String) {
         foodRepository.incrementQuantity(itemName)
-        foodView.updateQuantity(0)
+        foodView.updateQuantity("Added to cart!")
     }
 
     override fun onMinusBtnClicked(itemName: String) {
         foodRepository.decrementQuantity(itemName)
-        foodView.updateQuantity(0)
+        foodView.updateQuantity("Removed from cart!")
     }
 
 

@@ -13,7 +13,7 @@ interface FoodContract {
 
         fun showDescription(food: Food)
 
-        fun updateQuantity(qty: Int)
+        fun updateQuantity(message: String)
 
     }
 
