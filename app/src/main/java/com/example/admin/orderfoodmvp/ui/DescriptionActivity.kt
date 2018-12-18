@@ -4,15 +4,24 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.AppCompatButton
 import com.example.admin.orderfoodmvp.R
+import com.example.admin.orderfoodmvp.data.source.FoodRepository
+import com.example.admin.orderfoodmvp.data.source.local.FoodLocalDataSource
+import com.example.admin.orderfoodmvp.data.source.remote.FoodRemoteDataSource
+import com.example.admin.orderfoodmvp.presenter.description.DescriptionContract
+import com.example.admin.orderfoodmvp.presenter.description.DescriptionPresenter
 import com.example.admin.orderfoodmvp.util.load
 import kotlinx.android.synthetic.main.activity_description.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.toast
 
-class DescriptionActivity : AppCompatActivity() {
+class DescriptionActivity : AppCompatActivity(), DescriptionContract.View {
+    override fun updateQuantity(message: String) {
+        toast(message)
+    }
 
     private lateinit var plusBtn: AppCompatButton
     private lateinit var minusBtn: AppCompatButton
+    private lateinit var presenter: DescriptionContract.Presenter
 
     companion object {
         val TITLE = "DescriptionActivity:title"
@@ -29,7 +38,10 @@ class DescriptionActivity : AppCompatActivity() {
         plusBtn = find(R.id.plus_btn)
         minusBtn = find(R.id.minus_btn)
 
-        title = intent.getStringExtra(TITLE)
+        presenter = DescriptionPresenter(FoodRepository(FoodRemoteDataSource,
+                            FoodLocalDataSource(application = application)), this)
+        val itemName = intent.getStringExtra(TITLE)
+        title = itemName
         rating.text = "Rating: "+ intent.getDoubleExtra(RATING, -1.0)
         val amount = intent.getDoubleExtra(PRICE, 0.0)
 
@@ -38,11 +50,9 @@ class DescriptionActivity : AppCompatActivity() {
         val url = intent.getStringExtra(IMAGE_URL)
         icon.load(url)
 
-        plusBtn.setOnClickListener {
-            toast("Added to cart!") }
+        plusBtn.setOnClickListener { presenter.onAddBtnClicked(itemName)}
 
-        minusBtn.setOnClickListener {
-            toast("removed from cart!") }
+        minusBtn.setOnClickListener {presenter.onRemoveBtnClicked(itemName)}
 
 
 
