@@ -26,9 +26,9 @@ import org.jetbrains.anko.toast
 class MainActivity : AppCompatActivity(), FoodContract.View {
 
 
-
     private lateinit var presenter: FoodPresenter
     private lateinit var recyclerView: RecyclerView
+    private var items = emptyList<Food>()
 
 
     /**
@@ -81,7 +81,12 @@ class MainActivity : AppCompatActivity(), FoodContract.View {
             .setTitle("Filter based on")
             .setMultiChoiceItems(choiceItems, checkedItems, object: DialogInterface.OnMultiChoiceClickListener{
                 override fun onClick(dialog: DialogInterface?, which: Int, isChecked: Boolean) {
-
+                    if(checkedItems[which] && which == 0){
+                        presenter.filterBasedOnPrice(items)
+                    }
+                    if(checkedItems[which] && which == 1){
+                        presenter.filterBasedOnRating(items)
+                    }
                 }
             })
             .setPositiveButton("Ok", null)
@@ -95,6 +100,7 @@ class MainActivity : AppCompatActivity(), FoodContract.View {
 
     override fun showFoodItems(items: List<Food>) {
 
+        this.items = items
         recyclerView.apply {
             adapter = FoodListAdapter(applicationContext, items, presenter::onItemClicked,
                 presenter::onPlusBtnClicked, presenter::onMinusBtnClicked)
@@ -108,6 +114,13 @@ class MainActivity : AppCompatActivity(), FoodContract.View {
             progressBar.visibility = View.GONE
     }
 
+    override fun showFilteredFoodItems(items: List<Food>) {
+        Log.d("MainActivity", "filtered items: ${items}")
+        recyclerView.apply {
+            adapter = FoodListAdapter(applicationContext,items, presenter::onItemClicked,
+                presenter::onPlusBtnClicked, presenter::onMinusBtnClicked)
+        }
+    }
     override fun showNoFoodItems() {
 
     }

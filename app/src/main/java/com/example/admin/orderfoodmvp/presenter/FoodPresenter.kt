@@ -5,6 +5,16 @@ import com.example.admin.orderfoodmvp.data.source.FoodDataSource
 import com.example.admin.orderfoodmvp.data.source.FoodRepository
 
 class FoodPresenter(val foodRepository: FoodRepository, val foodView: FoodContract.View): FoodContract.Presenter {
+    override fun filterBasedOnRating(items: List<Food>) {
+        val sortedList = items.sortedWith(compareBy { it.average_rating })
+        foodView.showFilteredFoodItems(sortedList)
+    }
+
+    override fun filterBasedOnPrice(items: List<Food>) {
+        val sortedList = items.sortedWith(compareBy { it.item_price })
+        foodView.showFilteredFoodItems(sortedList)
+    }
+
     override fun onFilterClicked() {
         foodView.showFilterDialog()
     }

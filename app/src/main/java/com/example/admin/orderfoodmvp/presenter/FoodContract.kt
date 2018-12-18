@@ -17,6 +17,8 @@ interface FoodContract {
 
         fun showFilterDialog()
 
+        fun showFilteredFoodItems(items: List<Food>)
+
     }
 
     interface Presenter {
@@ -30,5 +32,9 @@ interface FoodContract {
         fun onPlusBtnClicked(itemName: String)
 
         fun onMinusBtnClicked(itemName: String)
+
+        fun filterBasedOnPrice(items: List<Food>)
+
+        fun filterBasedOnRating(items: List<Food>)
     }
 }
