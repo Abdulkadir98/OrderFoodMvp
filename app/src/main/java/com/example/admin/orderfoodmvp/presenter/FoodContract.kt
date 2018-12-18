@@ -15,6 +15,8 @@ interface FoodContract {
 
         fun updateQuantity(message: String)
 
+        fun showFilterDialog()
+
     }
 
     interface Presenter {
@@ -22,6 +24,8 @@ interface FoodContract {
         fun loadFoodItems()
 
         fun onItemClicked(food: Food)
+
+        fun onFilterClicked()
 
         fun onPlusBtnClicked(itemName: String)
 

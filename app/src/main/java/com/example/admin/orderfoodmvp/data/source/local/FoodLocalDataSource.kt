@@ -19,9 +19,10 @@ class FoodLocalDataSource(var foodDao: FoodDao? = null, application: Application
 
     override fun getFoodItemsInCart(callback: FoodDataSource.LoadFoodItemsCallback) {
         scope.launch(Dispatchers.IO) {
-            val items = foodDao?.getFoodItemsInCart()
+            val items = foodDao?.getFoodItemsInCart()!!
             withContext(Dispatchers.IO) {
-                callback.onFoodItemsLoaded(items!!)
+
+                callback.onFoodItemsLoaded(items)
             }
         }
     }
@@ -55,7 +56,10 @@ class FoodLocalDataSource(var foodDao: FoodDao? = null, application: Application
 
              val items = foodDao?.getFoodItems()!!
              withContext(Dispatchers.Main) {
+                 if(items.isNotEmpty())
                  callback.onFoodItemsLoaded(items)
+                 else
+                     callback.onDataNotAvailable("Not available!")
              }
         }
     }

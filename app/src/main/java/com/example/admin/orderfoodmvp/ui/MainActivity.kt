@@ -1,6 +1,8 @@
 package com.example.admin.orderfoodmvp.ui
 
+import android.content.DialogInterface
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -20,7 +22,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
-import java.util.*
 
 class MainActivity : AppCompatActivity(), FoodContract.View {
 
@@ -72,6 +73,22 @@ class MainActivity : AppCompatActivity(), FoodContract.View {
         Log.d("MainActivity", "OnResume:called")
     }
 
+    override fun showFilterDialog() {
+        val choiceItems = resources.getStringArray(R.array.dialog_multi_choice_array)
+        val checkedItems = arrayListOf(false, false).toBooleanArray()
+
+        AlertDialog.Builder(this)
+            .setTitle("Filter based on")
+            .setMultiChoiceItems(choiceItems, checkedItems, object: DialogInterface.OnMultiChoiceClickListener{
+                override fun onClick(dialog: DialogInterface?, which: Int, isChecked: Boolean) {
+
+                }
+            })
+            .setPositiveButton("Ok", null)
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
     override fun updateQuantity(message: String) {
         toast(message)
     }
@@ -110,9 +127,17 @@ class MainActivity : AppCompatActivity(), FoodContract.View {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
 
-        if (id == R.id.action_cart) {
-            startActivity<CartActivity>()
-            return true
+//        if (id == R.id.action_cart) {
+//            startActivity<CartActivity>()
+//            return true
+//        }
+        when(id) {
+            R.id.action_cart -> {startActivity<CartActivity>()
+                true}
+            R.id.action_filter -> {
+                presenter.onFilterClicked()
+                true
+            }
         }
 
         return super.onOptionsItemSelected(item)

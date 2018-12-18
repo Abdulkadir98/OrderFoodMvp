@@ -5,6 +5,9 @@ import com.example.admin.orderfoodmvp.data.source.FoodDataSource
 import com.example.admin.orderfoodmvp.data.source.FoodRepository
 
 class FoodPresenter(val foodRepository: FoodRepository, val foodView: FoodContract.View): FoodContract.Presenter {
+    override fun onFilterClicked() {
+        foodView.showFilterDialog()
+    }
 
     override fun onPlusBtnClicked(itemName: String) {
         foodRepository.incrementQuantity(itemName)
