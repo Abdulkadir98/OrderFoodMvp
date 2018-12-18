@@ -7,6 +7,25 @@ import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
 class FoodLocalDataSource(var foodDao: FoodDao? = null, application: Application) : FoodDataSource {
+
+    private var parentJob = Job()
+    private val coroutineContext: CoroutineContext
+        get() = parentJob + Dispatchers.Main
+    private val scope = CoroutineScope(coroutineContext)
+    init {
+        foodDao = FoodDatabase.getInstance(application, scope).foodDao()
+
+    }
+
+    override fun getFoodItemsInCart(callback: FoodDataSource.LoadFoodItemsCallback) {
+        scope.launch(Dispatchers.IO) {
+            val items = foodDao?.getFoodItemsInCart()
+            withContext(Dispatchers.IO) {
+                callback.onFoodItemsLoaded(items!!)
+            }
+        }
+    }
+
     override fun incrementQuantity(name: String) {
         scope.launch(Dispatchers.IO) {
             foodDao?.increaseQuantityOfFood(name)
@@ -23,14 +42,7 @@ class FoodLocalDataSource(var foodDao: FoodDao? = null, application: Application
 
     }
 
-    private var parentJob = Job()
-    private val coroutineContext: CoroutineContext
-        get() = parentJob + Dispatchers.Main
-    private val scope = CoroutineScope(coroutineContext)
-    init {
-        foodDao = FoodDatabase.getInstance(application, scope).foodDao()
 
-    }
     override fun saveFoodItems(items: List<Food>) {
         scope.launch(Dispatchers.IO) {
             foodDao?.insert(items)

@@ -15,8 +15,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-        <ImageView android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
+        <ImageView android:layout_width="88dp"
+                   android:layout_height="96dp"
                    android:id="@+id/icon"
                    android:src="@drawable/ic_curry"/>
         <LinearLayout android:layout_width="0dp"

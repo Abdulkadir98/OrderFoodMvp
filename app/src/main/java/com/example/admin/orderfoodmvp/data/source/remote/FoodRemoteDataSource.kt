@@ -8,6 +8,10 @@ import retrofit2.Callback
 import retrofit2.Response
 
 object FoodRemoteDataSource : FoodDataSource {
+    override fun getFoodItemsInCart(callback: FoodDataSource.LoadFoodItemsCallback) {
+
+    }
+
     override fun incrementQuantity(name: String) {
 
     }

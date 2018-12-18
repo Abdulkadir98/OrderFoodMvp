@@ -5,6 +5,20 @@ import java.util.*
 
 class FoodRepository(val foodRemoteDataSource: FoodDataSource,
                      val foodLocalDataSource: FoodDataSource) : FoodDataSource {
+
+    override fun getFoodItemsInCart(callback: FoodDataSource.LoadFoodItemsCallback) {
+        foodLocalDataSource.getFoodItemsInCart(object: FoodDataSource.LoadFoodItemsCallback{
+            override fun onFoodItemsLoaded(items: List<Food>) {
+                callback.onFoodItemsLoaded(items)
+            }
+
+            override fun onDataNotAvailable(errorMessage: String) {
+                callback.onDataNotAvailable("Not available!")
+            }
+
+        })
+    }
+
     override fun incrementQuantity(name: String) {
         foodLocalDataSource.incrementQuantity(name)
     }

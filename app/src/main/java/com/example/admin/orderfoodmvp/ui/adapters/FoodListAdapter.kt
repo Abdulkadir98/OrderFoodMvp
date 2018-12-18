@@ -11,7 +11,7 @@ import com.example.admin.orderfoodmvp.util.load
 import kotlinx.android.synthetic.main.food_item.view.*
 
 class FoodListAdapter internal constructor(
-    context: Context, val list: List<Food>,
+    context: Context, list: List<Food>,
     val itemClick: (Food) -> Unit,
     val plusBtnClick: (String) -> Unit,
     val minusBtnClick: (String) -> Unit

@@ -12,6 +12,8 @@ interface FoodDataSource {
 
     fun getFoodItems(callback: LoadFoodItemsCallback)
 
+    fun getFoodItemsInCart(callback: LoadFoodItemsCallback)
+
     fun incrementQuantity(name: String)
 
     fun decrementQuantity(name: String)

@@ -42,7 +42,6 @@
             android:layout_marginRight="8dp"
             android:id="@+id/grandTotalContainer"
             app:cardElevation="3dp"
-            android:background="@android:color/darker_gray"
             app:contentPadding="8dp"
             android:visibility="gone">
 
