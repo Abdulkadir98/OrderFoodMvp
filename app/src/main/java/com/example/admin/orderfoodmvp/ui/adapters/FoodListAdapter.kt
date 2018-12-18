@@ -12,12 +12,12 @@ import kotlinx.android.synthetic.main.food_item.view.*
 
 class FoodListAdapter internal constructor(
     context: Context, val list: List<Food>,
-    val itemClick: (Food) -> Unit
+    val itemClick: (Food) -> Unit,
+    val plusBtnClick: (String) -> Unit,
+    val minusBtnClick: (String) -> Unit
 ) : RecyclerView.Adapter<FoodListAdapter.FoodViewHolder>() {
 
 
-
-    private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var foodItems = list// Cached copy of food items.
 
     inner class FoodViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -26,9 +26,10 @@ class FoodListAdapter internal constructor(
             with(food) {
 
                 itemView.foodTitle.text = item_name
+                itemView.qtyView.text = quantity.toString()
                 itemView.icon.load(image_url)
-                itemView.plusBtn.setOnClickListener {  }
-                itemView.minusBtn.setOnClickListener {  }
+                itemView.plusBtn.setOnClickListener { plusBtnClick(this.item_name) }
+                itemView.minusBtn.setOnClickListener { minusBtnClick(this.item_name) }
                 itemView.setOnClickListener {
                     itemClick(this)
                 }

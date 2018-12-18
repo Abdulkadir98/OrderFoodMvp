@@ -2,10 +2,17 @@ package com.example.admin.orderfoodmvp.data.source
 
 import com.example.admin.orderfoodmvp.data.Food
 import java.util.*
-import kotlin.collections.ArrayList
 
 class FoodRepository(val foodRemoteDataSource: FoodDataSource,
                      val foodLocalDataSource: FoodDataSource) : FoodDataSource {
+    override fun incrementQuantity(name: String) {
+        foodLocalDataSource.incrementQuantity(name)
+    }
+
+    override fun decrementQuantity(name: String) {
+        foodLocalDataSource.decrementQuantity(name)
+    }
+
     override fun refreshFoodItems() {
         cacheIsDirty = true
     }
@@ -23,14 +30,16 @@ class FoodRepository(val foodRemoteDataSource: FoodDataSource,
 
     override fun getFoodItems(callback: FoodDataSource.LoadFoodItemsCallback) {
 
-        if(cachedFoodItems.isNotEmpty() && !cacheIsDirty) {
-            callback.onFoodItemsLoaded(ArrayList(cachedFoodItems.values))
-        }
+        //getFoodItemsFromRemoteDataSource(callback)
 
-        else {
+//        if(cachedFoodItems.isNotEmpty() && !cacheIsDirty) {
+//            callback.onFoodItemsLoaded(ArrayList(cachedFoodItems.values))
+//        }
+//
+//        else {
             foodLocalDataSource.getFoodItems(object: FoodDataSource.LoadFoodItemsCallback{
                 override fun onFoodItemsLoaded(items: List<Food>) {
-                    refreshCache(items)
+                    //refreshCache(items)
                     callback.onFoodItemsLoaded(items)
                 }
 
@@ -39,7 +48,7 @@ class FoodRepository(val foodRemoteDataSource: FoodDataSource,
                 }
 
             })
-        }
+//        }
 
 
     }

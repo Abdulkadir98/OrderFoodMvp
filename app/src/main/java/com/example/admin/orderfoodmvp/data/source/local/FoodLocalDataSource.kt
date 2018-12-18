@@ -7,6 +7,18 @@ import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
 class FoodLocalDataSource(var foodDao: FoodDao? = null, application: Application) : FoodDataSource {
+    override fun incrementQuantity(name: String) {
+        scope.launch(Dispatchers.IO) {
+            foodDao?.increaseQuantityOfFood(name)
+        }
+    }
+
+    override fun decrementQuantity(name: String) {
+        scope.launch(Dispatchers.IO) {
+            foodDao?.decreaseQuantityOfFood(name)
+        }
+    }
+
     override fun refreshFoodItems() {
 
     }
@@ -27,16 +39,16 @@ class FoodLocalDataSource(var foodDao: FoodDao? = null, application: Application
 
 
     override fun getFoodItems(callback: FoodDataSource.LoadFoodItemsCallback) {
-        var items: List<Food> = emptyList()
-        scope.launch(Dispatchers.IO) {
-            items = async { loadItems() }.await()
+         scope.launch(Dispatchers.IO) {
+
+             val items = foodDao?.getFoodItems()!!
+             withContext(Dispatchers.Main) {
+                 callback.onFoodItemsLoaded(items)
+             }
         }
-        if(items.isEmpty())
-            callback.onDataNotAvailable("Not available")
-        callback.onFoodItemsLoaded(items)
     }
 
-    private suspend fun loadItems() : List<Food>  = foodDao?.getFoodItems()!!
+
 
 
 

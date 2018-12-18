@@ -12,6 +12,10 @@ interface FoodDataSource {
 
     fun getFoodItems(callback: LoadFoodItemsCallback)
 
+    fun incrementQuantity(name: String)
+
+    fun decrementQuantity(name: String)
+
     fun saveFoodItems(items: List<Food>)
 
     fun refreshFoodItems()

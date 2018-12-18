@@ -8,6 +8,13 @@ import retrofit2.Callback
 import retrofit2.Response
 
 object FoodRemoteDataSource : FoodDataSource {
+    override fun incrementQuantity(name: String) {
+
+    }
+
+    override fun decrementQuantity(name: String) {
+    }
+
     override fun refreshFoodItems() {
 
     }

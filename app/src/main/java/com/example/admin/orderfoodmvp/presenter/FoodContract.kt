@@ -13,13 +13,18 @@ interface FoodContract {
 
         fun showDescription(food: Food)
 
+        fun updateQuantity(qty: Int)
+
     }
 
     interface Presenter {
 
         fun loadFoodItems()
 
-
         fun onItemClicked(food: Food)
+
+        fun onPlusBtnClicked(itemName: String)
+
+        fun onMinusBtnClicked(itemName: String)
     }
 }

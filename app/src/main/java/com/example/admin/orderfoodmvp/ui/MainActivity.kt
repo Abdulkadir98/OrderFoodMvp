@@ -19,6 +19,7 @@ import com.example.admin.orderfoodmvp.ui.adapters.FoodListAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.toast
 import java.util.*
 
 class MainActivity : AppCompatActivity(), FoodContract.View {
@@ -55,7 +56,8 @@ class MainActivity : AppCompatActivity(), FoodContract.View {
                                                                         , this)
         presenter.loadFoodItems()
 
-        val adapter = FoodListAdapter(this, ArrayList<Food>(0)) {}
+        val adapter = FoodListAdapter(this, ArrayList<Food>(0), presenter::onItemClicked,
+            presenter::onPlusBtnClicked, presenter::onMinusBtnClicked)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -70,10 +72,15 @@ class MainActivity : AppCompatActivity(), FoodContract.View {
         Log.d("MainActivity", "OnResume:called")
     }
 
+    override fun updateQuantity(qty: Int) {
+        toast("Clicked!")
+    }
+
     override fun showFoodItems(items: List<Food>) {
 
         recyclerView.apply {
-            adapter = FoodListAdapter(applicationContext, items, presenter::onItemClicked)
+            adapter = FoodListAdapter(applicationContext, items, presenter::onItemClicked,
+                presenter::onPlusBtnClicked, presenter::onMinusBtnClicked)
         }
         Log.d("MainActivity", "data: ${items}")
     }

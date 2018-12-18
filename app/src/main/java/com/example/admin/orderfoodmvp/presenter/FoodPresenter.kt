@@ -6,7 +6,16 @@ import com.example.admin.orderfoodmvp.data.source.FoodRepository
 
 class FoodPresenter(val foodRepository: FoodRepository, val foodView: FoodContract.View): FoodContract.Presenter {
 
-    private var firstLoad = true
+    override fun onPlusBtnClicked(itemName: String) {
+        foodRepository.incrementQuantity(itemName)
+        foodView.updateQuantity(0)
+    }
+
+    override fun onMinusBtnClicked(itemName: String) {
+        foodRepository.decrementQuantity(itemName)
+        foodView.updateQuantity(0)
+    }
+
 
     override fun onItemClicked(food: Food) {
         foodView.showDescription(food)
@@ -23,10 +32,8 @@ class FoodPresenter(val foodRepository: FoodRepository, val foodView: FoodContra
                 foodView.setLoadingIndicator(false)
                 foodView.showFoodItems(items)
 
-                if (firstLoad) {
-                    foodRepository.saveFoodItems(items)
-                    firstLoad = false
-                }
+                    //foodRepository.saveFoodItems(items)
+
 
 
             }
