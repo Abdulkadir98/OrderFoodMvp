@@ -13,23 +13,24 @@ import kotlinx.android.synthetic.main.food_item.view.*
 class FoodListAdapter internal constructor(
     context: Context, list: List<Food>,
     val itemClick: (Food) -> Unit,
-    val plusBtnClick: (String) -> Unit,
-    val minusBtnClick: (String) -> Unit
+    val plusBtnClick: (Food, Int) -> Unit,
+    val minusBtnClick: (Food, Int) -> Unit
 ) : RecyclerView.Adapter<FoodListAdapter.FoodViewHolder>() {
 
 
-    private var foodItems = list// Cached copy of food items.
+    private var foodItems = ArrayList(list)// Cached copy of food items.
 
     inner class FoodViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bindFoodItem(food: Food) {
             with(food) {
 
+                val position = adapterPosition
                 itemView.foodTitle.text = item_name
-                //itemView.qtyView.text = quantity.toString()
+                itemView.qtyView.text = quantity.toString()
                 itemView.icon.load(image_url)
-                itemView.plusBtn.setOnClickListener { plusBtnClick(this.item_name) }
-                itemView.minusBtn.setOnClickListener { minusBtnClick(this.item_name) }
+                itemView.plusBtn.setOnClickListener { plusBtnClick(this, position) }
+                itemView.minusBtn.setOnClickListener { minusBtnClick(this, position) }
                 itemView.setOnClickListener {
                     itemClick(this)
                 }
@@ -42,8 +43,13 @@ class FoodListAdapter internal constructor(
         return FoodViewHolder(itemView)
     }
 
-    internal fun setFoodItems(foodItems: List<Food>) {
-        this.foodItems = foodItems
+//    internal fun setFoodItems(foodItems: List<Food>) {
+//        this.foodItems = foodItems
+//        notifyDataSetChanged()
+//    }
+
+    internal fun setFoodItem(item: Food, position: Int) {
+        this.foodItems.set(position, item)
         notifyDataSetChanged()
     }
 

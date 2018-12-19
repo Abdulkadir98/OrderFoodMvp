@@ -13,7 +13,7 @@ interface FoodContract {
 
         fun showDescription(food: Food)
 
-        fun updateQuantity(message: String)
+        fun updateQuantity(message: String, item: Food, position: Int)
 
         fun showFilterDialog()
 
@@ -31,9 +31,9 @@ interface FoodContract {
 
         fun onFilterClicked()
 
-        fun onPlusBtnClicked(itemName: String)
+        fun onPlusBtnClicked(item: Food, position: Int)
 
-        fun onMinusBtnClicked(itemName: String)
+        fun onMinusBtnClicked(item: Food, position: Int)
 
         fun filterBasedOnPrice(items: List<Food>)
 

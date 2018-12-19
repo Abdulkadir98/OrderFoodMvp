@@ -8,4 +8,4 @@ data class Food(val average_rating: Double,
                 val image_url: String,
                 @PrimaryKey val item_name: String,
                 val item_price: Double,
-                val quantity: Int)
+                var quantity: Int)

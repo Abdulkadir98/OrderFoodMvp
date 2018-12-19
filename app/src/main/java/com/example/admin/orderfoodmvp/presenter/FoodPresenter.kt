@@ -1,6 +1,5 @@
 package com.example.admin.orderfoodmvp.presenter
 
-import android.util.Log
 import com.example.admin.orderfoodmvp.data.Food
 import com.example.admin.orderfoodmvp.data.source.FoodDataSource
 import com.example.admin.orderfoodmvp.data.source.FoodRepository
@@ -9,7 +8,7 @@ class FoodPresenter(val foodRepository: FoodRepository, val foodView: FoodContra
     override fun itemsInCart() {
         foodRepository.getFoodItemsInCart(object: FoodDataSource.LoadFoodItemsCallback{
             override fun onFoodItemsLoaded(items: List<Food>) {
-
+                foodView.updateCartMenuItemWithItemsInCart(items.size)
             }
 
             override fun onDataNotAvailable(errorMessage: String) {
@@ -32,15 +31,23 @@ class FoodPresenter(val foodRepository: FoodRepository, val foodView: FoodContra
         foodView.showFilterDialog()
     }
 
-    override fun onPlusBtnClicked(itemName: String) {
-        foodRepository.incrementQuantity(itemName)
-        foodView.updateQuantity("Added to cart!")
+    override fun onPlusBtnClicked(item: Food, position: Int) {
+
+        foodRepository.incrementQuantity(item.item_name)
+        item.apply {
+            quantity++
+        }
+        foodView.updateQuantity("Added to cart!", item, position)
 
     }
 
-    override fun onMinusBtnClicked(itemName: String) {
-        foodRepository.decrementQuantity(itemName)
-        foodView.updateQuantity("Removed from cart!")
+    override fun onMinusBtnClicked(item: Food, position: Int) {
+
+        foodRepository.decrementQuantity(item.item_name)
+        item.apply {
+            quantity--
+        }
+        foodView.updateQuantity("Removed from cart!", item, position)
     }
 
 
@@ -60,7 +67,6 @@ class FoodPresenter(val foodRepository: FoodRepository, val foodView: FoodContra
                 foodView.showFoodItems(items)
 
                 val itemCount = items.filter { it.quantity > 0 }.size
-                Log.d("FoodPresenter:Items ", "${itemCount}")
                 foodView.updateCartMenuItemWithItemsInCart(itemCount)
 
                     //foodRepository.saveFoodItems(items)
@@ -70,6 +76,7 @@ class FoodPresenter(val foodRepository: FoodRepository, val foodView: FoodContra
             }
 
             override fun onDataNotAvailable(errorMessage: String) {
+
             }
 
         })

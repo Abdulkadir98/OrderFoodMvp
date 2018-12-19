@@ -20,8 +20,7 @@ class FoodLocalDataSource(var foodDao: FoodDao? = null, application: Application
     override fun getFoodItemsInCart(callback: FoodDataSource.LoadFoodItemsCallback) {
         scope.launch(Dispatchers.IO) {
             val items = foodDao?.getFoodItemsInCart()!!
-            withContext(Dispatchers.IO) {
-
+            withContext(Dispatchers.Main) {
                 callback.onFoodItemsLoaded(items)
             }
         }

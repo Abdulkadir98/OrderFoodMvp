@@ -29,11 +29,15 @@ class MainActivity : AppCompatActivity(), FoodContract.View {
 
 
 
-    private lateinit var presenter: FoodPresenter
     private lateinit var recyclerView: RecyclerView
+    private lateinit var presenter: FoodPresenter
     private lateinit var cartMenuItem: MenuItem
     private lateinit var cartItemCountView: TextView
     private var items = emptyList<Food>()
+
+    private var adapter = FoodListAdapter(this, ArrayList(0), {},
+        {item: Food, postion: Int ->}, {item: Food, position: Int->}
+    )
 
 
     /**
@@ -54,16 +58,18 @@ class MainActivity : AppCompatActivity(), FoodContract.View {
         setSupportActionBar(toolbar)
         toolbar.title = "Order food"
 
+          presenter = FoodPresenter(
+            FoodRepository(FoodRemoteDataSource, FoodLocalDataSource(application = this.application))
+            , this)
+
         recyclerView = find(R.id.recyclerView)
 
 
         // primary sections of the activity.
-        presenter = FoodPresenter(FoodRepository(FoodRemoteDataSource, FoodLocalDataSource(application = this.application))
-                                                                        , this)
+
         presenter.loadFoodItems()
 
-        val adapter = FoodListAdapter(this, ArrayList<Food>(0), presenter::onItemClicked,
-            presenter::onPlusBtnClicked, presenter::onMinusBtnClicked)
+
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -79,6 +85,11 @@ class MainActivity : AppCompatActivity(), FoodContract.View {
     }
     override fun updateCartMenuItemWithItemsInCart(itemCount: Int) {
         mCartItemCount = itemCount
+        Log.d("MainActivity", "cart items: ${mCartItemCount}")
+
+        if(::cartItemCountView.isInitialized)
+            setUpBadge()
+
     }
 
     override fun showFilterDialog() {
@@ -102,17 +113,20 @@ class MainActivity : AppCompatActivity(), FoodContract.View {
             .show()
     }
 
-    override fun updateQuantity(message: String) {
+    override fun updateQuantity(message: String,  item: Food, position: Int) {
         toast(message)
+        adapter.setFoodItem(item, position)
+
+        //necessary to update the menu icon with the latest item added to cart
+        presenter.itemsInCart()
     }
 
     override fun showFoodItems(items: List<Food>) {
 
         this.items = items
-        recyclerView.apply {
-            adapter = FoodListAdapter(applicationContext, items, presenter::onItemClicked,
+        adapter = FoodListAdapter(applicationContext, items, presenter::onItemClicked,
                 presenter::onPlusBtnClicked, presenter::onMinusBtnClicked)
-        }
+        recyclerView.adapter = adapter
         Log.d("MainActivity", "data: ${items}")
     }
     override fun setLoadingIndicator(active: Boolean) {
