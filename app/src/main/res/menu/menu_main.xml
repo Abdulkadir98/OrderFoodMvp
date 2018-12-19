@@ -5,6 +5,7 @@
     <item android:id="@+id/action_cart"
           android:orderInCategory="100"
           android:icon="@drawable/ic_cart"
+          app:actionLayout="@layout/custom_action_item_layout"
           android:title="cart"
           app:showAsAction="always"/>
     <item android:id="@+id/action_filter"

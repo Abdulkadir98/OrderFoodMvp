@@ -1,10 +1,23 @@
 package com.example.admin.orderfoodmvp.presenter
 
+import android.util.Log
 import com.example.admin.orderfoodmvp.data.Food
 import com.example.admin.orderfoodmvp.data.source.FoodDataSource
 import com.example.admin.orderfoodmvp.data.source.FoodRepository
 
 class FoodPresenter(val foodRepository: FoodRepository, val foodView: FoodContract.View): FoodContract.Presenter {
+    override fun itemsInCart() {
+        foodRepository.getFoodItemsInCart(object: FoodDataSource.LoadFoodItemsCallback{
+            override fun onFoodItemsLoaded(items: List<Food>) {
+
+            }
+
+            override fun onDataNotAvailable(errorMessage: String) {
+            }
+
+        })
+    }
+
     override fun filterBasedOnRating(items: List<Food>) {
         val sortedList = items.sortedWith(compareBy { it.average_rating })
         foodView.showFilteredFoodItems(sortedList)
@@ -22,6 +35,7 @@ class FoodPresenter(val foodRepository: FoodRepository, val foodView: FoodContra
     override fun onPlusBtnClicked(itemName: String) {
         foodRepository.incrementQuantity(itemName)
         foodView.updateQuantity("Added to cart!")
+
     }
 
     override fun onMinusBtnClicked(itemName: String) {
@@ -44,6 +58,10 @@ class FoodPresenter(val foodRepository: FoodRepository, val foodView: FoodContra
 
                 foodView.setLoadingIndicator(false)
                 foodView.showFoodItems(items)
+
+                val itemCount = items.filter { it.quantity > 0 }.size
+                Log.d("FoodPresenter:Items ", "${itemCount}")
+                foodView.updateCartMenuItemWithItemsInCart(itemCount)
 
                     //foodRepository.saveFoodItems(items)
 

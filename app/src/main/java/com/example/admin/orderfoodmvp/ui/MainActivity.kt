@@ -2,6 +2,7 @@ package com.example.admin.orderfoodmvp.ui
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.support.v4.view.MenuItemCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -10,6 +11,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import com.example.admin.orderfoodmvp.R
 import com.example.admin.orderfoodmvp.data.Food
 import com.example.admin.orderfoodmvp.data.source.FoodRepository
@@ -26,8 +28,11 @@ import org.jetbrains.anko.toast
 class MainActivity : AppCompatActivity(), FoodContract.View {
 
 
+
     private lateinit var presenter: FoodPresenter
     private lateinit var recyclerView: RecyclerView
+    private lateinit var cartMenuItem: MenuItem
+    private lateinit var cartItemCountView: TextView
     private var items = emptyList<Food>()
 
 
@@ -71,6 +76,9 @@ class MainActivity : AppCompatActivity(), FoodContract.View {
     override fun onResume() {
         super.onResume()
         Log.d("MainActivity", "OnResume:called")
+    }
+    override fun updateCartMenuItemWithItemsInCart(itemCount: Int) {
+        mCartItemCount = itemCount
     }
 
     override fun showFilterDialog() {
@@ -134,6 +142,14 @@ class MainActivity : AppCompatActivity(), FoodContract.View {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
+        cartMenuItem = menu?.findItem(R.id.action_cart)!!
+
+        val actionView = MenuItemCompat.getActionView(cartMenuItem)
+        cartItemCountView = actionView.findViewById(R.id.cart_badge)
+
+        setUpBadge()
+
+        actionView.setOnClickListener { onOptionsItemSelected(cartMenuItem) }
         return true
     }
 
@@ -155,7 +171,25 @@ class MainActivity : AppCompatActivity(), FoodContract.View {
 
         return super.onOptionsItemSelected(item)
     }
+
+    private var mCartItemCount: Int = 0
+
+    private fun setUpBadge() {
+        if (cartItemCountView != null) {
+            if (mCartItemCount == 0) {
+                if (cartItemCountView.getVisibility() != View.GONE) {
+                    cartItemCountView.setVisibility(View.GONE);
+                }
+            } else {
+                cartItemCountView.setText((Math.min(mCartItemCount, 99)).toString());
+                if (cartItemCountView.getVisibility() != View.VISIBLE) {
+                    cartItemCountView.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+    }
 }
+
 
 
 

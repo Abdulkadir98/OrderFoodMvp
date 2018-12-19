@@ -19,6 +19,8 @@ interface FoodContract {
 
         fun showFilteredFoodItems(items: List<Food>)
 
+        fun updateCartMenuItemWithItemsInCart(itemCount: Int)
+
     }
 
     interface Presenter {
@@ -36,5 +38,7 @@ interface FoodContract {
         fun filterBasedOnPrice(items: List<Food>)
 
         fun filterBasedOnRating(items: List<Food>)
+
+        fun itemsInCart()
     }
 }
