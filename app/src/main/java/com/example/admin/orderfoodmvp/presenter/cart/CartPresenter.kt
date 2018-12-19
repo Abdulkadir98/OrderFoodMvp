@@ -6,13 +6,8 @@ import com.example.admin.orderfoodmvp.data.source.FoodRepository
 
 class CartPresenter(val repository: FoodRepository, val cartView: CartContract.View): CartContract.Presenter {
     override fun calculateGrandTotal(items: List<Food>) {
-        var grandTotal = 0.0
-        var total: Double = 0.0
-        items.forEach {
-            total = it.item_price * it.quantity
-            grandTotal += total
 
-        }
+        val grandTotal = items.map { it.item_price }.reduce { acc, price -> price + acc  }
         cartView.showGrandTotal(grandTotal)
     }
 
