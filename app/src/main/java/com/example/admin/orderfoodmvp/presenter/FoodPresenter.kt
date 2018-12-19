@@ -12,6 +12,7 @@ class FoodPresenter(val foodRepository: FoodRepository, val foodView: FoodContra
             }
 
             override fun onDataNotAvailable(errorMessage: String) {
+
             }
 
         })

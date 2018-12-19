@@ -9,5 +9,7 @@ interface DescriptionContract {
         fun onAddBtnClicked(itemName: String)
 
         fun onRemoveBtnClicked(itemName: String)
+
+        fun itemsInCart()
     }
 }

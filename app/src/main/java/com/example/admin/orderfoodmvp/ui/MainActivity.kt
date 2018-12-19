@@ -81,6 +81,7 @@ class MainActivity : AppCompatActivity(), FoodContract.View {
 
     override fun onResume() {
         super.onResume()
+        presenter.loadFoodItems()
         Log.d("MainActivity", "OnResume:called")
     }
     override fun updateCartMenuItemWithItemsInCart(itemCount: Int) {
